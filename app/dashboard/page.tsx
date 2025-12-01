@@ -32,9 +32,27 @@ export default function DashboardPage() {
 
   const handleSend = async (id: number) => {
     setLoadingSend(id);
-    await sendBroadcast(id);
-    await load();
-    setLoadingSend(null);
+    try {
+      const result = await sendBroadcast(id);
+      // Optionally show result details
+      alert(
+        `Broadcast sent — status: ${result.status} pushed_to: ${
+          result.pushed_to ?? 0
+        }`
+      );
+      await load();
+    } catch (err: unknown) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const e: any = err;
+      const message = e?.message || "Failed to send broadcast";
+      // If serverResponse exists we can show server's error object
+      if (e?.serverResponse) {
+        console.error("Server response:", e.serverResponse);
+      }
+      alert(`Error sending broadcast: ${message}`);
+    } finally {
+      setLoadingSend(null);
+    }
   };
 
   return (
@@ -77,7 +95,7 @@ export default function DashboardPage() {
                 </Link>
 
                 <Link
-                  href={`/broadcasts/${b.id}/edit`}
+                  href={`/dashboard/${b.id}/edit`}
                   className="px-3 py-2 bg-yellow-400 text-white rounded-lg hover:bg-yellow-500"
                 >
                   Edit
