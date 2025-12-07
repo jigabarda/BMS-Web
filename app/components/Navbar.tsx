@@ -16,48 +16,63 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-gray-100 p-3 flex items-center space-x-4">
-      <Link href="/" className="text-blue-700 hover:underline">
-        Home
-      </Link>
+    <nav className="bg-gray-100 p-3 flex items-center relative">
+      {/* LEFT — LOGO */}
+      <div className="mr-6">
+        <Link href="/" className="text-xl font-bold text-blue-700">
+          BMS 🛰️
+        </Link>
+      </div>
 
-      <Link href="/dashboard" className="text-blue-700 hover:underline">
-        Dashboard
-      </Link>
+      {/* CENTER — NAV LINKS */}
+      <div className="absolute left-1/2 font-semibold -translate-x-1/2 flex space-x-6">
+        <Link href="/" className="text-blue-700 hover:underline">
+          Home
+        </Link>
+        <Link href="/dashboard" className="text-blue-700 hover:underline">
+          Dashboard
+        </Link>
+        <Link href="/analytics" className="text-blue-700 hover:underline">
+          Analytics
+        </Link>
+        <Link href="/reports" className="text-blue-700 hover:underline">
+          Reports
+        </Link>
+        <Link href="/content" className="text-blue-700 hover:underline">
+          Content
+        </Link>
+      </div>
 
-      <Link href="/broadcasts/create" className="text-blue-700 hover:underline">
-        Create Broadcast
-      </Link>
+      {/* RIGHT — ACCOUNT INFO */}
+      <div className="ml-auto flex items-center space-x-3">
+        {user ? (
+          <>
+            <span className="text-gray-700">Hi, {user.email}</span>
+            <button
+              onClick={handleLogout}
+              className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Login
+            </Link>
 
-      <div className="flex-1" />
-
-      {user ? (
-        <>
-          <span className="text-gray-700">Hi, {user.email}</span>
-          <button
-            onClick={handleLogout}
-            className="ml-3 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Logout
-          </button>
-        </>
-      ) : (
-        <>
-          <Link
-            href="/login"
-            className="ml-3 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Login
-          </Link>
-
-          <Link
-            href="/register"
-            className="ml-3 px-3 py-1 border rounded hover:bg-gray-100"
-          >
-            Register
-          </Link>
-        </>
-      )}
+            <Link
+              href="/register"
+              className="px-3 py-1 border rounded hover:bg-gray-100"
+            >
+              Register
+            </Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 }
