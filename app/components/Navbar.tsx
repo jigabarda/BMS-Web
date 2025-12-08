@@ -1,22 +1,30 @@
-// app/components/Navbar.tsx
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/app/store/authStore";
 
 export default function Navbar() {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const router = useRouter();
+  const pathname = usePathname(); // detect current path
 
   const handleLogout = () => {
     logout();
     router.push("/login");
   };
 
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Analytics", href: "/analytics" },
+    { name: "Reports", href: "/reports" },
+    { name: "Content", href: "/content" },
+  ];
+
   return (
-    <nav className="bg-gray-100 p-3 flex items-center relative">
+    <nav className="bg-[#061026] shadow-white p-3 flex items-center relative">
       {/* LEFT — LOGO */}
       <div className="mr-6">
         <Link href="/" className="text-xl font-bold text-blue-700">
@@ -26,28 +34,31 @@ export default function Navbar() {
 
       {/* CENTER — NAV LINKS */}
       <div className="absolute left-1/2 font-semibold -translate-x-1/2 flex space-x-6">
-        <Link href="/" className="text-blue-700 hover:underline">
-          Home
-        </Link>
-        <Link href="/dashboard" className="text-blue-700 hover:underline">
-          Dashboard
-        </Link>
-        <Link href="/analytics" className="text-blue-700 hover:underline">
-          Analytics
-        </Link>
-        <Link href="/reports" className="text-blue-700 hover:underline">
-          Reports
-        </Link>
-        <Link href="/content" className="text-blue-700 hover:underline">
-          Content
-        </Link>
+        {navLinks.map((link) => {
+          const isActive = pathname === link.href;
+          return (
+            <div key={link.href} className="flex flex-col items-center">
+              <Link
+                href={link.href}
+                className={`${
+                  isActive ? "text-blue-700" : "text-white hover:text-blue-700"
+                }`}
+              >
+                {link.name}
+              </Link>
+              {isActive && (
+                <span className="block w-8 h-1 bg-blue-700 rounded-full"></span>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* RIGHT — ACCOUNT INFO */}
       <div className="ml-auto flex items-center space-x-3">
         {user ? (
           <>
-            <span className="text-gray-700">Hi, {user.email}</span>
+            <span className="text-white">Hi, {user.email}</span>
             <button
               onClick={handleLogout}
               className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
