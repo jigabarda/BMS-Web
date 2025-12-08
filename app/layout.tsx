@@ -1,5 +1,7 @@
 // app/layout.tsx
 import "./globals.css";
+import "@fortawesome/fontawesome-free/css/all.min.css"; // ← ADD THIS LINE
+
 import type { Metadata } from "next";
 import Navbar from "@/app/components/Navbar";
 import AuthProvider from "@/app/components/AuthProvider";
